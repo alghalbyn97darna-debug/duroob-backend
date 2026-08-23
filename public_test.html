@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>بحث الرحلات - دروب المستقبل</title>
+<style>
+body{font-family:sans-serif; background:#0B1F3A; color:#fff; padding:20px; text-align:center;}
+h1{color:#F2A93B;}
+.trip{background:#132050; margin:12px auto; padding:16px; border-radius:12px; max-width:400px; text-align:right;}
+.trip b{color:#F2A93B;}
+</style>
+</head>
+<body>
+<h1>الرحلات المتاحة</h1>
+<div id="trips">جارٍ التحميل...</div>
+
+<script>
+fetch('http://localhost:3000/api/trips')
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById('trips');
+    container.innerHTML = '';
+    data.forEach(trip => {
+      container.innerHTML += '<div class="trip"><b>' + trip.from + ' → ' + trip.to + '</b><br>الموعد: ' + trip.time + '<br>السعر: ' + trip.price + ' د.ل<br>الشركة: ' + trip.company + '</div>';
+    });
+  })
+  .catch(err => {
+    document.getElementById('trips').innerHTML = 'حدث خطأ بالاتصال بالسيرفر';
+  });
+</script>
+</body>
+</html>
