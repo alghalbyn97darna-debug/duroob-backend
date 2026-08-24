@@ -1,6 +1,9 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
 
 const trips = [
   { id: 1, from: "طرابلس", to: "مصراتة", time: "08:00 ص", price: 25, company: "شركة الوحدة" },
@@ -17,8 +20,8 @@ app.get('/', (req, res) => {
   res.send('سيرفر دروب المستقبل شغال ✅');
 });
 
+app.use(express.static(__dirname));
+
 app.listen(PORT, () => {
   console.log('السيرفر شغال على http://localhost:' + PORT);
 });
-
-app.use(express.static(__dirname));
