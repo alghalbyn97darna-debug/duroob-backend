@@ -5,15 +5,18 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 
-const trips = [
-  { id: 1, from: "طرابلس", to: "مصراتة", time: "08:00 ص", price: 25, company: "شركة الوحدة" },
-  { id: 2, from: "طرابلس", to: "بنغازي", time: "09:30 ص", price: 60, company: "شركة الصداقة" },
-  { id: 3, from: "مصراتة", to: "سرت", time: "11:00 ص", price: 20, company: "شركة الوحدة" },
-  { id: 4, from: "بنغازي", to: "البيضاء", time: "01:00 م", price: 15, company: "شركة الشرق" }
-];
+const SHEET_API = 'https://opensheet.elk.sh/17x_nEzcEvn3PoH-O0XP_NuT4JhY-Bbc8zgmlOybKkQw/1';
 
-app.get('/api/trips', (req, res) => {
-  res.json(trips);
+app.get('/api/trips', async (req, res) => {
+  try {
+    const response = await fetch(SHEET_API);
+    if (!response.ok) throw new Error('فشل الاتصال بالشيت');
+    const trips = await response.json();
+    res.json(trips);
+  } catch (error) {
+    console.error('خطأ بجلب الرحلات:', error.message);
+    res.status(500).json({ error: 'تعذر تحميل الرحلات حاليًا' });
+  }
 });
 
 app.get('/', (req, res) => {
